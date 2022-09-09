@@ -1,18 +1,18 @@
 #include <iostream>
-#include <algorithm>
+#include <algorithm> // Для знаходження НСД (для скорочення дробу, якщо можливо)
 using namespace std;
 
 class Pair{
-    double first, second;
+    double first, second; //власне поля
 public:
-    Pair () {
+    Pair () { // Конструктор без параметрів (використовується при створенні масивів, бо масиви не надають параметри)
         cout << "Created pair with no given values." << endl;
     }
-    Pair (double f, double s) {
+    Pair (double f, double s) { // Конструктор з параметрами
         cout << "Created pair. ";
-        if (s == 0){
+        if (s == 0){ // Знаменник не повинен дорівнювати нулю, тому знищуємо пару, якщо при створенні пари друге поле прирівнюють до нуля.
             cout << endl << "\"Second\" can't equal to 0! This pair is destroyed." << endl;
-            this->~Pair();
+            this->~Pair(); // Виклик деструктора для пари, що створюється
         }
         else{
             first = f;
@@ -29,12 +29,12 @@ public:
         Pair left;
         left.first = this->first;
         left.second = this->second;
-        int nsk = (left.second * right.second) / __gcd(int(left.second), int(right.second));
+        int nsk = (left.second * right.second) / __gcd(int(left.second), int(right.second)); // Шукаємо НСК (для додавання дробів)
         left.first *= nsk / left.second;
         int nom = right.first * nsk / right.second;
         left.first += nom;
         left.second = nsk;
-        int left_gcd = __gcd(int(left.first), int(left.second));
+        int left_gcd = __gcd(int(left.first), int(left.second)); // Частина скорочення дробу (можна було винести у окрему функцію)
         left.first /= left_gcd;
         left.second /= left_gcd;
         return left;
@@ -43,7 +43,7 @@ public:
         Pair left;
         left.first = this->first;
         left.second = this->second;
-        left.first += num * left.second;
+        left.first += num * left.second; // Додаємо число за правилами математики
         int left_gcd = __gcd(int(left.first), int(left.second));
         left.first /= left_gcd;
         left.second /= left_gcd;
@@ -60,7 +60,7 @@ public:
         return *this;
     }
 
-    Pair operator++(int){
+    Pair operator++(int){ // Тип використовується лише щоб показати, що це префіксний унарний оператор
         Pair temp = *this;
         first += second;
         int gcd = __gcd(int(first), int(second));
@@ -70,7 +70,7 @@ public:
         }
         return temp;
     }
-
+    // Всі наступні методи викликаються для об'єктів, що не належать до описаного класу, тому вони описуються як дружні до класу.
     friend Pair operator+(int num, Pair& right);
     friend ostream& operator<<(ostream& os, const Pair& pair);
     friend istream& operator>>(istream& is, Pair& pair);
@@ -100,7 +100,7 @@ istream &operator>>(istream &is, Pair &pair) {
     return is;
 }
 
-int main() {
+int main() { // Закоментовані рядки коментувалися для перевірки
     Pair a_pair(3, 0);
     Pair b_pair(2, 3);
     Pair c_pair(6, 4);
